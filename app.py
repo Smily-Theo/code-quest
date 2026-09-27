@@ -17,7 +17,6 @@ sqlite_fallback = "/tmp/codequest.db" if os.environ.get("VERCEL") else "codeques
 app.config["SQLALCHEMY_DATABASE_URI"] = db_url or f"sqlite:///{sqlite_fallback}"
 
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-codequest-change-me")
-app.config.setdefault("SQLALCHEMY_DATABASE_URI", "sqlite:///codequest.db")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
@@ -76,6 +75,24 @@ class UserBadge(db.Model):
     badge_id = db.Column(db.Integer, db.ForeignKey("badge.id"), nullable=False)
     badge = db.relationship("Badge")
 
+_db_ready = False
+
+def ensure_database():
+    """Create/seed the database lazily so Vercel can import the app safely."""
+    global _db_ready
+    if _db_ready:
+        return
+    db.create_all()
+    if Lesson.query.count() == 0:
+        # Reuse the project's seed data on a brand-new database.
+        from seed import seed as seed_database
+        seed_database()
+    _db_ready = True
+
+@app.before_request
+def _prepare_database():
+    ensure_database()
+
 def current_user():
     uid = session.get("user_id")
     return db.session.get(User, uid) if uid else None
@@ -128,6 +145,16 @@ def login():
             return redirect(url_for("dashboard"))
         flash("Invalid email or password.", "error")
     return render_template("login.html")
+
+@app.route("/demo")
+def demo():
+    """Start a seeded demo session without requiring the user to register."""
+    user = User.query.filter_by(email="demo@codequest.local").first()
+    if not user:
+        return redirect(url_for("register"))
+    session["user_id"] = user.id
+    session["demo_mode"] = True
+    return redirect(url_for("dashboard"))
 
 @app.route("/logout")
 def logout():
@@ -234,8 +261,6 @@ def api_submit(challenge_id):
         return jsonify({"error": "Unauthorized"}), 401
     return jsonify({"message": "Use the web challenge page for the MVP submission flow."})
 
-with app.app_context():
-    db.create_all()
 
 if __name__ == "__main__":
     app.run(debug=True)
@@ -275,6 +300,15 @@ def run_code():
     ok="for i in range(1, 6)" in code and "print(i)" in code
     return jsonify({"ok":ok,"output":"1\n2\n3\n4\n5" if ok else "",
                     "message":"Challenge complete! +100 XP" if ok else "Try a for-loop with range(1, 6) and print(i)."})
+
+@app.get("/health/db")
+def health_db():
+    try:
+        ensure_database()
+        return jsonify({"status":"ok", "database": "ready", "lessons": Lesson.query.count()})
+    except Exception as exc:
+        app.logger.exception("Database health check failed")
+        return jsonify({"status":"error", "error": str(exc)}), 500
 
 @app.get("/health")
 def health():
