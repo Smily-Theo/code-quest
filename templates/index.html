@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}CodeQuest — Learn Python by Playing{% endblock %}
+{% block content %}
+<section class="hero">
+  <div>
+    <span class="eyebrow">🎮 GAMIFIED PYTHON LEARNING</span>
+    <h1>Learn Python.<br><span>Play. Level Up.</span></h1>
+    <p>Turn programming into an adventure. Solve challenges, earn XP, unlock worlds and become a Python legend.</p>
+    <div class="actions"><a class="btn primary" href="{{ url_for('register') }}">Start Your Quest →</a><a class="btn ghost" href="{{ url_for('login') }}">Play Demo</a></div>
+  </div>
+  <div class="hero-card">
+    <div class="orb">⚡</div><h3>CODEQUEST</h3><p>Python Adventure</p>
+    <div class="mini-progress"><span></span></div><small>Level 3 • 1,250 XP</small>
+  </div>
+</section>
+<section class="section">
+  <div class="section-head"><span class="eyebrow">WHY CODEQUEST?</span><h2>Learning that feels like a game.</h2></div>
+  <div class="feature-grid">
+    <div class="feature">🗺️<h3>Adventure Map</h3><p>Explore worlds that unlock as your skills grow.</p></div>
+    <div class="feature">🧩<h3>Interactive Challenges</h3><p>Practice with quizzes, code completion and debugging.</p></div>
+    <div class="feature">🏆<h3>Rewards</h3><p>Earn XP, badges and streaks as you progress.</p></div>
+    <div class="feature">🤖<h3>Smart Hints</h3><p>Get guidance that helps you solve problems yourself.</p></div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Challenge — CodeQuest{% endblock %}
+{% block content %}
+<div class="page narrow"><div class="challenge-shell"><div class="challenge-top"><span class="eyebrow">⚔️ CHALLENGE • +{{ challenge.xp_reward }} XP</span><span>Attempts: {{ progress.attempts }}</span></div>
+<h1>{{ challenge.question.split('\n')[0] }}</h1>
+{% if '\n\n' in challenge.question %}<pre class="codebox">{{ challenge.question.split('\n\n', 1)[1] }}</pre>{% endif %}
+<form method="post">
+{% for option in options %}<label class="option"><input type="radio" name="answer" value="{{ option }}" required><span>{{ option }}</span></label>{% endfor %}
+{% if not options %}<input name="answer" required placeholder="Type your answer">{% endif %}
+<button class="btn primary full">Submit Answer →</button></form>
+{% if result %}<div class="result {% if result.correct %}success{% else %}error{% endif %}"><strong>{% if result.correct %}🎉 Correct!{% else %}❌ Not quite.{% endif %}</strong><p>{{ result.message }}</p>{% if result.correct %}<p class="xp">+{{ result.xp }} XP</p>{% else %}<p><b>Hint:</b> {{ challenge.hint }}</p>{% endif %}</div>{% endif %}
+</div></div>
+{% endblock %}

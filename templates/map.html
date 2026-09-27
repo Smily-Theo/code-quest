@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Adventure Map — CodeQuest{% endblock %}
+{% block content %}
+<div class="page"><div class="section-head"><span class="eyebrow">WORLD MAP</span><h1>Your Python Adventure 🗺️</h1><p>Complete each world to unlock the next.</p></div>
+<div class="adventure-map">
+{% for l in lessons %}
+{% set p = progress.get(l.id) %}
+{% set unlocked = l.order_num == 1 or (progress.get(l.order_num-1) and progress.get(l.order_num-1).completed) %}
+<div class="map-node {% if p and p.completed %}done{% elif unlocked %}active{% else %}locked{% endif %}">
+<div class="node-icon">{{ l.icon }}</div><div><small>WORLD {{ l.order_num }}</small><h2>{{ l.title }}</h2><p>{{ l.description }}</p></div>
+{% if p and p.completed %}<span class="status">✓ Complete</span>{% elif unlocked %}<a class="btn primary small" href="{{ url_for('lesson', lesson_id=l.id) }}">Enter World</a>{% else %}<span class="status">🔒 Locked</span>{% endif %}
+</div>
+{% endfor %}
+</div></div>
+{% endblock %}

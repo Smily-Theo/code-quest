@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}{{ lesson.title }} — CodeQuest{% endblock %}
+{% block content %}
+<div class="page lesson-page"><div class="lesson-hero"><div class="big-icon">{{ lesson.icon }}</div><div><span class="eyebrow">WORLD {{ lesson.order_num }} • {{ lesson.difficulty }}</span><h1>{{ lesson.title }}</h1><p>{{ lesson.description }}</p></div></div>
+<div class="section-head"><span class="eyebrow">CHALLENGES</span><h2>Prove your skills</h2></div>
+<div class="challenge-list">{% for c in challenges %}<a class="challenge-card" href="{{ url_for('challenge', challenge_id=c.id) }}"><span class="number">{{ loop.index }}</span><div><small>{{ c.difficulty }} • +{{ c.xp_reward }} XP</small><h3>{{ c.question.split('\n')[0] }}</h3></div><span>→</span></a>{% endfor %}</div></div>
+{% endblock %}

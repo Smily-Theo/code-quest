@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Profile — CodeQuest{% endblock %}
+{% block content %}
+<div class="page narrow"><div class="profile-head"><div class="avatar large">{{ user.username[0]|upper }}</div><span class="eyebrow">PLAYER PROFILE</span><h1>{{ user.username }}</h1><p>Level {{ user.level }} • {{ user.xp }} XP • 🔥 {{ user.streak }} day streak</p></div>
+<div class="stats"><div><span>WORLDS</span><strong>{{ completed }}/8</strong></div><div><span>XP</span><strong>{{ user.xp }}</strong></div><div><span>BADGES</span><strong>{{ badges|length }}</strong></div></div>
+<h2>Achievements</h2><div class="badge-grid">{% for ub in badges %}<div class="badge"><span>{{ ub.badge.icon }}</span><strong>{{ ub.badge.name }}</strong><small>{{ ub.badge.description }}</small></div>{% else %}<p>No badges yet. Start a challenge!</p>{% endfor %}</div></div>
+{% endblock %}

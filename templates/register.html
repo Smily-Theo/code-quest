@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Register — CodeQuest{% endblock %}
+{% block content %}
+<div class="auth-card"><span class="eyebrow">NEW ADVENTURER</span><h1>Create your account.</h1>
+<form method="post"><label>Username</label><input name="username" required placeholder="CodeHero"><label>Email</label><input name="email" type="email" required placeholder="you@example.com"><label>Password</label><input name="password" type="password" minlength="6" required placeholder="At least 6 characters"><button class="btn primary full">Begin Adventure →</button></form></div>
+{% endblock %}

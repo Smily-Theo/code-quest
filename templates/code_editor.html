@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Code Quest{% endblock %}
+{% block content %}
+<div class="page narrow"><div class="challenge-shell">
+<div class="challenge-top"><span class="eyebrow">💻 CODE QUEST • +100 XP</span><span>Python</span></div>
+<h1>Write a loop that prints the numbers 1 to 5.</h1>
+<div class="editor-wrap">
+<textarea id="code-editor" spellcheck="false">for i in range(1, 6):
+    print(i)</textarea>
+<div class="editor-actions"><button class="btn primary" onclick="runCode()">▶ Run Code</button><button class="btn ghost" onclick="askTutor()">🤖 Ask Tutor</button></div>
+<pre id="code-output" class="code-output">Output will appear here...</pre></div>
+<div class="tutor-card"><div><b>🤖 CodeQuest Tutor</b><span>Guidance, not answers</span></div><p id="tutor-answer">Need help? Ask the tutor for a hint.</p></div>
+</div></div>
+<script>
+async function runCode(){const o=document.getElementById("code-output");o.textContent="Running...";const r=await fetch("/api/run-code",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({code:document.getElementById("code-editor").value})});const d=await r.json();o.textContent=(d.ok?"✅ ":"❌ ")+d.message+"\\n\\n"+(d.output||"");if(d.ok&&window.confettiBurst)window.confettiBurst()}
+async function askTutor(){const r=await fetch("/api/ai-tutor",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({question:"Write a for-loop that prints the numbers 1 to 5.",code:document.getElementById("code-editor").value})});const d=await r.json();document.getElementById("tutor-answer").textContent=d.answer||"Try breaking the problem into smaller steps."}
+</script>
+{% endblock %}

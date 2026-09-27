@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — CodeQuest{% endblock %}
+{% block content %}
+<div class="page">
+<div class="dash-head"><div><span class="eyebrow">YOUR ADVENTURE</span><h1>Welcome back, {{ user.username }} 👋</h1><p>Ready to defeat some bugs?</p></div><div class="streak">🔥 {{ user.streak }} day streak</div></div>
+<div class="stats"><div><span>XP</span><strong>{{ user.xp }}</strong></div><div><span>LEVEL</span><strong>{{ user.level }}</strong></div><div><span>WORLDS</span><strong>{{ completed }}/8</strong></div><div><span>STREAK</span><strong>🔥 {{ user.streak }}</strong></div></div>
+<div class="section-head row"><div><span class="eyebrow">CONTINUE</span><h2>Your Python Adventure</h2></div><a href="{{ url_for('learning_map') }}" class="btn ghost">View Map</a></div>
+<div class="map-grid">
+{% for l in lessons %}
+{% set p = progress.get(l.id) %}
+<div class="world {% if p and p.completed %}done{% elif l.order_num > 1 and not (progress.get(l.order_num-1) and progress.get(l.order_num-1).completed) %}locked{% else %}active{% endif %}">
+<div class="world-icon">{{ l.icon }}</div><div><small>WORLD {{ l.order_num }}</small><h3>{{ l.title }}</h3><p>{{ l.description }}</p></div>
+{% if p and p.completed %}<b>✓</b>{% elif l.order_num == 1 or (progress.get(l.order_num-1) and progress.get(l.order_num-1).completed) %}<a href="{{ url_for('lesson', lesson_id=l.id) }}">Play →</a>{% else %}<b>🔒</b>{% endif %}
+</div>
+{% endfor %}
+</div>
+</div>
+{% endblock %}

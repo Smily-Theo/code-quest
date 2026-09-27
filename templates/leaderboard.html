@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Leaderboard — CodeQuest{% endblock %}
+{% block content %}
+<div class="page narrow"><div class="section-head"><span class="eyebrow">COMPETE</span><h1>🏆 Leaderboard</h1><p>Earn XP and climb the CodeQuest ranks.</p></div>
+<div class="leaderboard">{% for u in users %}<div class="rank {% if current_user and u.id == current_user.id %}me{% endif %}"><b>#{{ loop.index }}</b><span class="avatar">{{ u.username[0]|upper }}</span><div><strong>{{ u.username }}</strong><small>Level {{ u.level }}</small></div><strong>{{ u.xp }} XP</strong></div>{% endfor %}</div></div>
+{% endblock %}

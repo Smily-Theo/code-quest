@@ -1,0 +1,14 @@
+# CodeQuest Hackathon Deployment Checklist
+- Test register/login
+- Test dashboard/map/challenges
+- Test XP, badges and streaks
+- Test `/health`
+- Test Code Quest editor
+- Test AI Tutor fallback
+- Add `OPENAI_API_KEY` for live AI
+- Push to GitHub
+- Create Render Web Service
+- Set `SECRET_KEY`
+- Set PostgreSQL `DATABASE_URL` for persistent data
+- Deploy and test the live URL
+- Record the demo

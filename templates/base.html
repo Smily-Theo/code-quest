@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}CodeQuest{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<nav class="nav">
+  <a class="brand" href="{{ url_for('index') }}">⚡ CodeQuest</a>
+  {% if current_user %}
+  <div class="navlinks">
+    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+    <a href="{{ url_for('learning_map') }}">Adventure</a>
+    <a href="{{ url_for('leaderboard') }}">Leaderboard</a>
+    <a href="{{ url_for('profile') }}">Profile</a>
+    <a class="nav-btn" href="{{ url_for('logout') }}">Logout</a>
+  </div>
+  {% else %}
+  <div class="navlinks"><a href="{{ url_for('login') }}">Login</a><a class="nav-btn" href="{{ url_for('register') }}">Start Free</a></div>
+  {% endif %}
+</nav>
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}<div class="flash-wrap">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+{% endwith %}
+<main>{% block content %}{% endblock %}</main>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html><script>window.confettiBurst=function(){for(let i=0;i<36;i++){const s=document.createElement("span");s.className="confetti";s.style.left=(35+Math.random()*30)+"vw";s.style.top="45vh";s.style.setProperty("--dx",(Math.random()*280-140)+"px");s.style.setProperty("--dy",(Math.random()*-280-80)+"px");document.body.appendChild(s);setTimeout(()=>s.remove(),1100)}};</script>
