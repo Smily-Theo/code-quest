@@ -10,10 +10,14 @@ app = Flask(__name__)
 db_url = os.environ.get("DATABASE_URL", "").strip()
 if db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql://", 1)
-app.config["SQLALCHEMY_DATABASE_URI"] = db_url or "sqlite:///codequest.db"
+# Vercel's deployed filesystem is not a persistent writable disk.
+# Use an external DATABASE_URL (recommended for production). If none is
+# configured, use /tmp only as a temporary fallback so the function can boot.
+sqlite_fallback = "/tmp/codequest.db" if os.environ.get("VERCEL") else "codequest.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = db_url or f"sqlite:///{sqlite_fallback}"
 
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-codequest-change-me")
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///codequest.db"
+app.config.setdefault("SQLALCHEMY_DATABASE_URI", "sqlite:///codequest.db")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
